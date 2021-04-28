@@ -23,7 +23,7 @@ public class Client_thread extends Thread {
 	
 	@Override
 	public void run() {
-		
+		//sdfafdfsfdfsafasfsadfsadfasfsad
 		try {
 			BufferedReader reader = new BufferedReader(
 					new InputStreamReader(sck.getInputStream(), "EUC_KR"));
