@@ -7,7 +7,8 @@ public class main_server {
 
 	public static void main(String[] args) {
 		
-		Vector user_list = new Vector(20);
+		Vector<Socket> user_list = new Vector<>(20);
+		Vector<Vector <Socket>> room_list = new Vector<>();
 		ServerSocket server_socket = null;
 		
 		try {
@@ -34,7 +35,7 @@ public class main_server {
 				
 				user_list.add(client_socket);
 				
-				Client_thread client_thread = new Client_thread(user_list, client_socket);
+				Client_thread client_thread = new Client_thread(client_socket, user_list, room_list);
 				client_thread.start();
 			}
 			
