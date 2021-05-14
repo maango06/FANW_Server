@@ -1,14 +1,16 @@
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class main_server {
 
 	public static void main(String[] args) {
 		
-		Vector<Socket> user_list = new Vector<>(20);
-		Vector<Vector <Socket>> room_list = new Vector<>();
+		List<Socket> user_list = Collections.synchronizedList(new ArrayList<Socket>(20));
+		List<room> room_list = Collections.synchronizedList(new ArrayList<room>(4));
 		ServerSocket server_socket = null;
 		
 		try {
@@ -25,7 +27,8 @@ public class main_server {
                         Socket s = (Socket) user_list.get(i);
                         if (s == null) {
                         	user_list.remove(i);
-                        	user_list.trimToSize();
+                     
+                        	//user_list.trimToSize();
                         	System.out.println("Someone get out");
                         }
                     }
