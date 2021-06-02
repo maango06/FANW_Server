@@ -1,7 +1,7 @@
 
 public class room {
 	int room_number;
-	user_info info[];
+	user_info info[] = new user_info[6];
 	int member_number;
 	
 	room(){

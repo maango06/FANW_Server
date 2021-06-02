@@ -99,6 +99,7 @@ public class Client_thread extends Thread {
 							}
 						}
 						
+						room_number = rand_number;
 						room newroom = new room();
 						newroom.room_number = rand_number;
 						newroom.info[0].sck = this.sck;
@@ -107,8 +108,8 @@ public class Client_thread extends Thread {
 						newroom.info[0].user_id = this.user_id;
 						newroom.member_number++;
 						room_list.add(newroom);
-						String temp_string = Integer.toString(rand_number);
-						temp_string = String.format("%06d", temp_string);
+						//String temp_string = Integer.toString(rand_number);
+						String temp_string = String.format("%06d", rand_number);
 						send_info("make_room|" + "S|" + temp_string, this.writer);
 						System.out.println("Success - make room");
 					}
@@ -136,8 +137,8 @@ public class Client_thread extends Thread {
 								room_list.get(i).member_number++;
 								
 								int roomnumber = room_list.get(i).room_number;
-								String temp_string = Integer.toString(roomnumber);
-								temp_string = String.format("%06d", temp_string);
+								//String temp_string = Integer.toString(roomnumber);
+								String temp_string = String.format("%06d", roomnumber);
 								send_info("make_room|" + "S|" + temp_string, this.writer);
 								room_number = Integer.parseInt(info[1]);
 								room_list.get(i).member_number++;
