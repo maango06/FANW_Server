@@ -78,9 +78,6 @@ public class Client_thread extends Thread {
 					synchronized(this) {
 					if(room_list.size() == 4) {
 						send_info("make_room|E|", this.writer);
-						/*writer.write("make_room/" + "E/");
-						writer.newLine();
-						writer.flush();*/
 						System.out.println("Error - make room");
 					}
 					else {
@@ -100,16 +97,18 @@ public class Client_thread extends Thread {
 							if(i == room_list.size()) {
 								flag = false;
 							}
-						}	
+						}
+						
 						room newroom = new room();
 						newroom.room_number = rand_number;
 						newroom.info[0].sck = this.sck;
 						newroom.info[0].Thumbnail = this.Thumbnail;
 						newroom.info[0].name = this.nickname;
+						newroom.info[0].user_id = this.user_id;
 						newroom.member_number++;
 						room_list.add(newroom);
 						String temp_string = Integer.toString(rand_number);
-						temp_string = String.format("06d", temp_string);
+						temp_string = String.format("%06d", temp_string);
 						send_info("make_room|" + "S|" + temp_string, this.writer);
 						System.out.println("Success - make room");
 					}
@@ -138,7 +137,7 @@ public class Client_thread extends Thread {
 								
 								int roomnumber = room_list.get(i).room_number;
 								String temp_string = Integer.toString(roomnumber);
-								temp_string = String.format("06d", temp_string);
+								temp_string = String.format("%06d", temp_string);
 								send_info("make_room|" + "S|" + temp_string, this.writer);
 								room_number = Integer.parseInt(info[1]);
 								room_list.get(i).member_number++;
@@ -159,18 +158,20 @@ public class Client_thread extends Thread {
 							break;
 						}
 					}
-					String send_line1 = "enter_room|";
+					String send_line1 = "enter_room|" + this.nickname + "::" + this.user_id + "::" + this.Thumbnail;
+					BufferedWriter t_write;
 					for(int i = 0; i < temp_room1.member_number; i++) {
-						send_line1 = send_line1 + temp_room1.info[i].name + "::" + temp_room1.info[i].user_id + "::" + temp_room1.info[i].Thumbnail + "|";
+						Socket temp = (Socket) temp_room1.info[i].sck;
+						t_write = new BufferedWriter(new OutputStreamWriter(temp.getOutputStream(), "EUC-KR"));
+						send_info(send_line1, t_write);
 					}
-					send_info(send_line1, this.writer);
 					}
 					break;
 					
 				case "message":
 					synchronized(this) {
 					room temp_room = null;
-					for(int i = 0; i < 4; i++) {
+					for(int i = 0; i < room_list.size(); i++) {
 						if(room_list.get(i).room_number == room_number) {
 							temp_room = room_list.get(i);
 						}
@@ -185,6 +186,7 @@ public class Client_thread extends Thread {
 	                    	System.out.println("[system]Someone get out");
 						} else {
 							t_write = new BufferedWriter(new OutputStreamWriter(temp.getOutputStream(), "EUC-KR"));
+							send_info(send_line, t_write);
 						}
 					}
 					System.out.println("[system]" + nickname + " : finished");
@@ -201,18 +203,20 @@ public class Client_thread extends Thread {
 						}
 					}
 					String send_line2 = "room_info|";
-					for(int i = 0; i < temp_room2.member_number; i++) {
+					for(int i = 0; i < temp_room2.member_number - 1; i++) { // -1ÇßÀ½
 						send_line2 = send_line2 + temp_room2.info[i].name + "::" + temp_room2.info[i].user_id + "::" + temp_room2.info[i].Thumbnail + "|";
 					}
 					send_info(send_line2, this.writer);
 					}
 					break;
+				case "quit_room":
+					synchronized(this) {
+						
+					}
+					break;
 				default:
 					System.out.println("unknown message" + this.nickname + " : " + line);
 				}
-				//case "quit_room":
-					
-					
 			}
 		} catch (IOException e) {
 			System.out.println("socket close");

@@ -7,7 +7,8 @@ public class room {
 	room(){
 		room_number = 0;
 		member_number = 0;
-		info = new user_info[6];
+		for(int i = 0; i < 6; i++) {
+			info[i] = new user_info();
+		}
 	}
 }
-
