@@ -21,17 +21,12 @@ public class Client_thread extends Thread {
 	String user_id;
 	String Thumbnail;
 	int room_number;
-	
-	
 	room in_room;
 	boolean is_moderator;
 	String thickness;
 	String color;
-	
 	String big;
 	String small;
-	
-	
 	
 	public int getIndex() {
 		int i;
@@ -42,7 +37,6 @@ public class Client_thread extends Thread {
 		}
 		return i;
 	}
-	
 	
 	public Client_thread(Socket socket, List user_list, List<room> room_list) {
 		this.user_list = user_list;
@@ -128,7 +122,6 @@ public class Client_thread extends Thread {
 						newroom.info[0].user_id = this.user_id;
 						newroom.member_number++;
 						room_list.add(newroom);
-						//String temp_string = Integer.toString(rand_number);
 						String temp_string = String.format("%06d", rand_number);
 						send_info("make_room|" + "S|" + temp_string, this.writer);
 						System.out.println("Success - make room");
@@ -136,6 +129,7 @@ public class Client_thread extends Thread {
 					}
 					}
 					break;
+					
 				case "enter_room":
 					System.out.println("enter room");
 					synchronized(this) {
@@ -158,7 +152,7 @@ public class Client_thread extends Thread {
 								room_list.get(i).info[room_list.get(i).member_number].user_id = this.user_id;
 								room_list.get(i).member_number++;
 								int roomnumber = room_list.get(i).room_number;
-								//String temp_string = Integer.toString(roomnumber);
+
 								String temp_string = String.format("%06d", roomnumber);
 								send_info("enter_room|S|" + temp_string, this.writer);
 								room_number = Integer.parseInt(info[1]);
@@ -248,10 +242,8 @@ public class Client_thread extends Thread {
 						in_room.member_number--;
 					}
 					break;
-					
-					
+							
 				case "topic":
-					
 					BufferedWriter t_write6;
 					String send_line;
 					
@@ -267,27 +259,9 @@ public class Client_thread extends Thread {
 						send_line = "topic|" + in_room.big + "|" + in_room.small;
 						send_info(send_line, t_write6);
 					}
-
-					/*
-					for(int i = 0; i < in_room.member_number; i++) {
-						if(in_room.info[i].is_liar) {
-							send_line = "topic|" + in_room.big + "|false";
-							Socket temp = (Socket)in_room.info[i].sck;
-							t_write6 = new BufferedWriter(new OutputStreamWriter(temp.getOutputStream(), "EUC-KR"));
-							send_info(send_line, t_write6);
-							continue;
-						}
-						Socket temp = (Socket)in_room.info[i].sck;
-						t_write6 = new BufferedWriter(new OutputStreamWriter(temp.getOutputStream(), "EUC-KR"));
-						send_line = "topic|" + in_room.big + "|" + in_room.small;
-						send_info(send_line, t_write6);
-					}*/
-					
-
 					
 					break;
 				case "thickness":
-					//thickness = info[1];
 					BufferedWriter t_write;
 					for(int i = 0; i < in_room.member_number; i++) {
 						if(in_room.info[i].sck == this.sck) continue;
@@ -299,7 +273,6 @@ public class Client_thread extends Thread {
 					break;
 					
 				case "color":
-					//color = info[1];
 					BufferedWriter t_write1;
 					for(int i = 0; i < in_room.member_number; i++) {
 						if(in_room.info[i].sck == this.sck) continue;
@@ -352,25 +325,13 @@ public class Client_thread extends Thread {
 					
 				case "game_start":
 					Random rand = new Random();
-					
-					int rand_liar = rand.nextInt(in_room.member_number);
-					
+					int rand_liar = rand.nextInt(in_room.member_number);	
 					for(int i = 0; i < in_room.member_number; i++) {
 						in_room.info[i].is_liar = false;
-					}
-					
+					}	
 					in_room.info[rand_liar].is_liar = true;
-					
-					
 					int random1 = rand.nextInt(6);
 					int random2 = rand.nextInt(3);
-					/*String animal[] = {"호랑이", "사슴", "고양이"};
-					String place[] = {"학교", "병원", "대형마트"};
-					String job[] = {"어부", "선생님", "변호사"};
-					String food[] = {"불고기", "햄버거", "치킨"};
-					String ride[] = {"비행기", "기차", "자동차"};
-					String feel[] = {"기쁨", "슬픔", "화남"};
-					String a[] = {"동물", "장소", "직업", "먹을 것", "탈 것", "감정"};*/
 					if(random1 == 0 && random2 == 0) {
 						this.big = "동물";
 						this.small = "호랑이";
@@ -449,9 +410,7 @@ public class Client_thread extends Thread {
 					}
 					
 					in_room.big = this.big;
-					in_room.small = this.small;
-					
-					
+					in_room.small = this.small;				
 					String send_line2 = "game_start";
 					BufferedWriter t_write7;
 					for(int i = 0; i < in_room.member_number; i++) {
@@ -463,14 +422,9 @@ public class Client_thread extends Thread {
 					timer_thread.start();
 					break;
 					
-					
-					
 				case "vote":
-					
 					if(in_room.vote_thread1 == null) {
-						
 						System.out.println("현재 null임");
-						
 						in_room.vote_thread1 = new vote_thread(in_room);
 						in_room.vote_thread1.start();
 					}
@@ -478,8 +432,6 @@ public class Client_thread extends Thread {
 					in_room.info[Integer.parseInt(info[1])].vote_num++;
 					System.out.println("보트 넘버: " + in_room.vote_num);
 					System.out.println("멤버 넘버: " + in_room.member_number);
-					
-					
 					break;
 
 				default:
