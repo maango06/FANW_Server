@@ -2,15 +2,14 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class main_server {
 
 	public static void main(String[] args) {
 		
-		List<Socket> user_list = Collections.synchronizedList(new ArrayList<Socket>(20));
-		List<room> room_list = Collections.synchronizedList(new ArrayList<room>(4));
+		List<Socket> user_list = new ArrayList<Socket>();
+		List<room> room_list = new ArrayList<room>();
 		ServerSocket server_socket = null;
 		
 		try {
